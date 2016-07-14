@@ -39,11 +39,22 @@ for interface in interfaces:
                      interface.attributes['usage']))
 
 # Display the data downloaded
+
+formated_data = ""
+msg_n=0
+
 template = "{0:17} {1:6} {2:^6} {3:^6} {4:7} {5:6} {6:9} "
 write_spark_message(template.format("INTERFACE", "TYPE", "ADMIN", "OPER", "SPEED", "MTU", "USAGE"))
 write_spark_message(template.format("---------", "----", "------", "------", "-----", "___", "---------"))
 for rec in data:
-    write_spark_message(template.format(*rec))
+    formated_data+=(template.format(*rec))
+    formated_data+=("\n")
+    msg_n+=1
+    if msg_n == 30:
+        write_spark_message(formated_data)
+        msg_n=0
+
+
 
 
 
