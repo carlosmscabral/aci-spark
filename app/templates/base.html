@@ -1,0 +1,24 @@
+<html>
+  <head>
+    {% if title %}
+    <title>{{ title }} - ACI-SPARK </title>
+    {% else %}
+    <title>ACI-SPARK</title>
+    {% endif %}
+  </head>
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+  <body>
+    <div>ACI-SPARK: <a href="/index">Home</a></div>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }} </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </body>
+</html>

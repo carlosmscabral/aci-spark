@@ -1,0 +1,18 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+    <h1> Hello! Please provide your Spark developer token below. </h1>
+    <h2> Tip: It can be found at <a href="https://developer.ciscospark.com">Spark for Developers</a></h2>
+    <h3> Login, copy your token and paste it below! </h3>
+    <form action="" method="post" name="token">
+      <p>
+          Please enter your Spark Token:<br>
+          {{ form.token(size=64) }}<br>
+          {% for error in form.token.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}<br>
+      </p>
+      <p><input type="submit" value="Submit"></p>
+    </form>
+{% endblock %}
