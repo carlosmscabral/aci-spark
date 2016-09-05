@@ -3,4 +3,25 @@
 
 {% block content %}
     <h1>Hello {{user}}!</h1>
+    <form action="" method="post" name="apicForm">
+      <p>
+          Please enter your APIC's IP Address: {{ form.apicIP(size=24) }}<br>
+          {% for error in form.apicIP.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}<br>
+      </p>
+        <p>
+          Please enter your APIC's admin username: {{ form.apicAdmin(size=24) }}<br>
+            {% for error in form.apicPassword.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}<br>
+      </p>
+        <p>
+          Please enter your APIC's password: {{ form.apicPassword(size=24) }}<br>
+            {% for error in form.apicPassword.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}<br>
+      </p>
+      <p><input type="submit" value="Submit"></p>
+    </form>
 {% endblock %}

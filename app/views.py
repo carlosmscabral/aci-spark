@@ -4,7 +4,8 @@ from flask import render_template, flash, redirect, session, url_for, request
 #    login_required
 
 from app import application #, db, lm, oid
-from forms import tokenForm
+from forms import tokenForm, apicForm
+from acitkit import *
 
 from spark import *
 
@@ -17,6 +18,7 @@ def index():
     if request.method == 'POST' and form.validate():
         user=get_me_name(form.token.data)
         session['usr_displayName'] = user
+        session['usr_token'] = form.token.data
         flash('Thanks for your token, lets begin!')
         return redirect(url_for('begin'))
     return render_template('index.html',
@@ -25,8 +27,20 @@ def index():
 
 @application.route('/begin',methods=['GET','POST'])
 def begin():
+    apicform = apicForm(request.form)
+    if request.method == 'POST' and apicform.validate():
+        apicIP=apicform.apicIP.data
+        apicAdmin=apicform.apicAdmin
+        apicPassword=apicform.apicPassword.data
+        aci_session = APIC_login_CLI(apicIP,apicAdmin,apicPassword)
+        resp = aci_session.login()
+        if not resp.ok:
+            print('%% Could not login to APIC')
+            return redirect(url_for('begin'))
+        print "okkkk"
     return render_template('begin.html',
-                           user=session.get('usr_displayName', None))
+                           user=session.get('usr_displayName', None),
+                           form = apicform)
 
 
 
