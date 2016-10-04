@@ -12,7 +12,7 @@
       </p>
         <p>
           Please enter your APIC's admin username: {{ form.apicAdmin(size=24) }}<br>
-            {% for error in form.apicPassword.errors %}
+            {% for error in form.apicAdmin.errors %}
             <span style="color: red;">[{{ error }}]</span>
           {% endfor %}<br>
       </p>

@@ -2,7 +2,7 @@ import json
 import requests
 import datetime
 
-from config import SPARK_PPL, SPARK_ROOMS, MY_TOKEN
+from config import SPARK_PPL, SPARK_ROOMS, MY_TOKEN, SPARK_MSG
 
 
 def get_me_name(auth_token=MY_TOKEN):
@@ -26,4 +26,14 @@ def createRoom(auth_token=MY_TOKEN):
 
     resp = requests.post(url,json=payload, headers=headers)
 
-    return str(resp.status_code)
+    room_dict = json.loads(resp.text)
+
+    return room_dict['id']
+
+def writeMessage(auth_token, room_id, text):
+    url = SPARK_MSG
+    headers = {'Authorization': 'Bearer ' + auth_token}
+
+    payload = {'roomId' : room_id,  'text' : text }
+
+    resp =  resp = requests.post(url,json=payload, headers=headers)

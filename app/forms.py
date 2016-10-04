@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, PasswordField, validators
+from wtforms import Form, StringField, PasswordField, validators, SelectField
 
 
 
@@ -10,4 +10,9 @@ class apicForm(Form):
     apicIP = StringField('apic_ip', [validators.IPAddress()])
     apicAdmin = StringField('apic_admin', [validators.DataRequired()])
     apicPassword = PasswordField('apic_password', [validators.DataRequired()])
+
+
+class subscribe_option(Form):
+    obj_type = SelectField('obj_subj')
+
 

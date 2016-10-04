@@ -1,13 +1,81 @@
 from  acitoolkit.acitoolkit import *
 
-def APIC_login_CLI(apic_ip, apic_admin, apic_password):
-    # Getting credentials from the command line.
-    description = 'VoD application'
+from spark import *
 
-    url='https://' + str(apic_ip)
+def APIC_login_CLI(apic_ip, apic_admin, apic_password):
 
     # Login to APIC
-    session = Session(url, str(apic_admin), str(apic_password))
-    session.login()
+    session = Session('https://' + str(apic_ip), str(apic_admin), str(apic_password))
 
     return session
+
+
+
+def getAllTenants(session):
+    tenants = Tenant.get(session)
+    tenant_list = []
+    for tenant in tenants:
+        tenant_list.append((tenant.name,tenant.name))
+
+    return tenant_list
+
+
+def APIC_tenant_subscribe(session, token, room_id, tenant_name):
+
+
+    Tenant.subscribe(session)
+    AppProfile.subscribe(session)
+    EPG.subscribe(session)
+    Endpoint.subscribe(session)
+
+
+    while True:
+
+        if Tenant.has_events(session):
+            event = Tenant.get_event(session)
+
+            if event.name == tenant_name:
+                if event.is_deleted():
+                    writeMessage(token, room_id, "### Tenant Deleted ###")
+                else:
+                    writeMessage(token, room_id, "### Tenant Created ###" )
+
+                writeMessage(token, room_id, 'Tn:*' + event.name + '*' )
+
+
+        if AppProfile.has_events(session):
+            event = AppProfile.get_event(session)
+            tenant = event.get_parent()
+
+            if tenant.name == tenant_name:
+                if event.is_deleted():
+                    print "### App Profile Deleted ###"
+                else:
+                    print "### App Profile Created ###"
+
+                print 'Tn:' + tenant.name + '\n =>' + 'AppProfile:*' + event.name + '*'
+
+        if EPG.has_events(session):
+            event = EPG.get_event(session)
+            appProf = event.get_parent()
+            tenant = appProf.get_parent()
+
+            if tenant.name == tenant_name:
+                if event.is_deleted():
+                    print "### EPG Removed ###"
+                else:
+                    print "### EPG Added ###"
+                print 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*'
+
+        if Endpoint.has_events(session):
+            event = Endpoint.get_event(session)
+            epg = event.get_parent()
+            appProf = epg.get_parent()
+            tenant = appProf.get_parent()
+
+            if tenant.name == tenant_name:
+                if event.is_deleted():
+                    print "### EP Removed ###"
+                else:
+                    print "### EP Attached ###"
+                print 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:' + epg.name + '\n ===>' + 'EP:*' + event.name + '*'

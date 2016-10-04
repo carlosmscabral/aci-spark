@@ -17,3 +17,4 @@ SECRET_KEY = 'you-will-never-guess'
 MY_TOKEN = "ZTYyMzNjMmUtZmMzZC00MjZjLTkwODItZTA1NmMzMTg2MzM5YTJiM2NiZjgtN2Yz"
 SPARK_PPL = "https://api.ciscospark.com/v1/people"
 SPARK_ROOMS = "https://api.ciscospark.com/v1/rooms"
+SPARK_MSG = "https://api.ciscospark.com/v1/messages"

@@ -1,0 +1,14 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Choose the category you want to monitor:</h1>
+    <form action="" method="post" name="objForm">
+      <p>
+          {{ form.obj_type }}<br>
+          {% for error in form.obj_type.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}<br>
+      </p>
+        <p><input type="submit" value="Submit"></p>
+{% endblock %}
