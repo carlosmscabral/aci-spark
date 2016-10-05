@@ -2,6 +2,8 @@ from  acitoolkit.acitoolkit import *
 
 from spark import *
 
+import time
+
 def APIC_login_CLI(apic_ip, apic_admin, apic_password):
 
     # Login to APIC
@@ -49,11 +51,11 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
 
             if tenant.name == tenant_name:
                 if event.is_deleted():
-                    print "### App Profile Deleted ###"
+                    writeMessage(token, room_id, "### App Profile Deleted ###")
                 else:
-                    print "### App Profile Created ###"
+                    writeMessage(token, room_id, "### App Profile Created ###")
 
-                print 'Tn:' + tenant.name + '\n =>' + 'AppProfile:*' + event.name + '*'
+                writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:*' + event.name + '*')
 
         if EPG.has_events(session):
             event = EPG.get_event(session)
@@ -62,10 +64,11 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
 
             if tenant.name == tenant_name:
                 if event.is_deleted():
-                    print "### EPG Removed ###"
+                    writeMessage(token, room_id, "### EPG Removed ###")
                 else:
-                    print "### EPG Added ###"
-                print 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*'
+                    writeMessage(token, room_id, "### EPG Added ###")
+
+                writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*')
 
         if Endpoint.has_events(session):
             event = Endpoint.get_event(session)
@@ -75,7 +78,10 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
 
             if tenant.name == tenant_name:
                 if event.is_deleted():
-                    print "### EP Removed ###"
+                    writeMessage(token, room_id, "### EP Removed ###")
                 else:
-                    print "### EP Attached ###"
-                print 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:' + epg.name + '\n ===>' + 'EP:*' + event.name + '*'
+                    writeMessage(token, room_id, "### EP Attached ###")
+
+                    writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:' + epg.name + '\n ===>' + 'EP:*' + event.name + '*')
+
+        time.sleep(0.1)
