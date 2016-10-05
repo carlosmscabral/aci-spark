@@ -42,7 +42,7 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
                 else:
                     writeMessage(token, room_id, "### Tenant Created ###" )
 
-                writeMessage(token, room_id, 'Tn:*' + event.name + '*' )
+                writeMessage(token, room_id, 'Tn:*' + event.name + '*\n' )
 
 
         if AppProfile.has_events(session):
@@ -55,7 +55,7 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
                 else:
                     writeMessage(token, room_id, "### App Profile Created ###")
 
-                writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:*' + event.name + '*')
+                writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:*' + event.name + '*\n')
 
         if EPG.has_events(session):
             event = EPG.get_event(session)
@@ -68,7 +68,7 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
                 else:
                     writeMessage(token, room_id, "### EPG Added ###")
 
-                writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*')
+                writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*\n')
 
         if Endpoint.has_events(session):
             event = Endpoint.get_event(session)
@@ -82,6 +82,6 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
                 else:
                     writeMessage(token, room_id, "### EP Attached ###")
 
-                    writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:' + epg.name + '\n ===>' + 'EP:*' + event.name + '*')
+                    writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:' + epg.name + '\n ===>' + 'EP:*' + event.name + '*\n')
 
         time.sleep(0.1)
