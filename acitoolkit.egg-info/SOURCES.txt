@@ -1,6 +1,0 @@
-acitoolkit/setup.py
-acitoolkit.egg-info/PKG-INFO
-acitoolkit.egg-info/SOURCES.txt
-acitoolkit.egg-info/dependency_links.txt
-acitoolkit.egg-info/requires.txt
-acitoolkit.egg-info/top_level.txt
