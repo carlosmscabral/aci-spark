@@ -69,6 +69,8 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
             if tenant.name == tenant_name:
                 if event.is_deleted():
                     writeMessage(token, room_id, "### EPG Removed ###")
+                    writeMessage(token, room_id,
+                                 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*\n')
                 else:
                     if lastEPG != event.name:
                         writeMessage(token, room_id, "### EPG Added ###")
