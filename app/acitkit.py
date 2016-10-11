@@ -30,6 +30,7 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
     EPG.subscribe(session)
     Endpoint.subscribe(session)
 
+    lastEPG = None
 
     while True:
 
@@ -58,17 +59,24 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
                 writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:*' + event.name + '*\n')
 
         if EPG.has_events(session):
+
             event = EPG.get_event(session)
             appProf = event.get_parent()
             tenant = appProf.get_parent()
+
+
 
             if tenant.name == tenant_name:
                 if event.is_deleted():
                     writeMessage(token, room_id, "### EPG Removed ###")
                 else:
-                    writeMessage(token, room_id, "### EPG Added ###")
+                    if lastEPG != event.name:
+                        writeMessage(token, room_id, "### EPG Added ###")
+                        writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*\n')
+                        lastEPG = event.name
+                    else:
+                        lastEPG = None
 
-                writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*\n')
 
         if Endpoint.has_events(session):
             event = Endpoint.get_event(session)
