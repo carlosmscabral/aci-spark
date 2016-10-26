@@ -21,6 +21,14 @@ def getAllTenants(session):
 
     return tenant_list
 
+def epgExists(session, appProf, tenant, epgName):
+
+    epgs = EPG.get(session,appProf,tenant)
+    for epg in epgs:
+        if epg.name == epgName:
+            return True
+
+    return False
 
 def APIC_tenant_subscribe(session, token, room_id, tenant_name):
 
@@ -30,7 +38,7 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
     EPG.subscribe(session)
     Endpoint.subscribe(session)
 
-    lastEPG = None
+    createdEpgs = []
 
     while True:
 
@@ -67,17 +75,17 @@ def APIC_tenant_subscribe(session, token, room_id, tenant_name):
 
 
             if tenant.name == tenant_name:
+
                 if event.is_deleted():
                     writeMessage(token, room_id, "### EPG Removed ###")
                     writeMessage(token, room_id,
                                  'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*\n')
+                    createdEpgs.remove(event.name)
                 else:
-                    if lastEPG != event.name:
+                    if event.name not in createdEpgs:
                         writeMessage(token, room_id, "### EPG Added ###")
                         writeMessage(token, room_id, 'Tn:' + tenant.name + '\n =>' + 'AppProfile:' + appProf.name + '\n ==>' + 'EPG:*' + event.name + '*\n')
-                        lastEPG = event.name
-                    else:
-                        lastEPG = None
+                        createdEpgs.append(event.name)
 
 
         if Endpoint.has_events(session):
